@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, AlertCircle, CheckCircle, Facebook, Instagram } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import ScrollToTop from '../components/ScrollToTop';
 
 export interface FormData {
   name: string;
@@ -214,6 +215,7 @@ const Contact = () => {
           </div>
         </div>
       </div>
+      <ScrollToTop />
     </div>
   );
 };
