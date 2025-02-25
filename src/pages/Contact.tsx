@@ -1,68 +1,82 @@
-import React, { useState } from 'react';
-import { Mail, Phone, MapPin, AlertCircle, CheckCircle, Facebook, Instagram } from 'lucide-react';
-import { supabase } from '../lib/supabase';
-import ScrollToTop from '../components/ScrollToTop';
+import React, { useState } from "react";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  AlertCircle,
+  CheckCircle,
+  Facebook,
+  Instagram,
+} from "lucide-react";
+import { supabase } from "../lib/supabase";
+import ScrollToTop from "../components/ScrollToTop";
 
 export interface FormData {
   name: string;
   email: string;
-  service: 'wedding' | 'garden' | '';
+  service: "wedding" | "garden" | "";
   message: string;
 }
 
 const Contact = () => {
   const [formData, setFormData] = useState<FormData>({
-    name: '',
-    email: '',
-    service: '',
-    message: '',
+    name: "",
+    email: "",
+    service: "",
+    message: "",
   });
   const [status, setStatus] = useState<{
-    type: 'success' | 'error' | null;
+    type: "success" | "error" | null;
     message: string;
-  }>({ type: null, message: '' });
+  }>({ type: null, message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setStatus({ type: null, message: '' });
+    setStatus({ type: null, message: "" });
 
     try {
-      const { error } = await supabase
-        .from('contact_messages')
-        .insert([
-          {
-            name: formData.name,
-            email: formData.email,
-            service: formData.service,
-            message: formData.message,
-            status: 'new'
-          }
-        ]);
+      const { error } = await supabase.from("contact_messages").insert([
+        {
+          name: formData.name,
+          email: formData.email,
+          service: formData.service,
+          message: formData.message,
+          status: "new",
+        },
+      ]);
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
 
       setStatus({
-        type: 'success',
-        message: 'Votre message a été envoyé avec succès. Nous vous contacterons bientôt.'
+        type: "success",
+        message:
+          "Votre message a été envoyé avec succès. Nous vous contacterons bientôt.",
       });
-      setFormData({ name: '', email: '', service: '', message: '' });
+      setFormData({ name: "", email: "", service: "", message: "" });
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error("Error submitting form:", error);
       setStatus({
-        type: 'error',
-        message: 'Une erreur est survenue lors de l\'envoi du message. Veuillez réessayer.'
+        type: "error",
+        message:
+          "Une erreur est survenue lors de l'envoi du message. Veuillez réessayer.",
       });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData(prev => ({
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     }));
   };
 
@@ -74,10 +88,14 @@ const Contact = () => {
         {/* Contact Form */}
         <div>
           {status.type && (
-            <div className={`mb-6 p-4 rounded-lg ${
-              status.type === 'success' ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'
-            }`}>
-              {status.type === 'success' ? (
+            <div
+              className={`mb-6 p-4 rounded-lg ${
+                status.type === "success"
+                  ? "bg-green-50 border border-green-200"
+                  : "bg-red-50 border border-red-200"
+              }`}
+            >
+              {status.type === "success" ? (
                 <div className="flex items-center">
                   <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
                   <span className="text-green-700">{status.message}</span>
@@ -93,7 +111,10 @@ const Contact = () => {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Nom
               </label>
               <input
@@ -107,7 +128,10 @@ const Contact = () => {
               />
             </div>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Email
               </label>
               <input
@@ -121,7 +145,10 @@ const Contact = () => {
               />
             </div>
             <div>
-              <label htmlFor="service" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="service"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Service
               </label>
               <select
@@ -138,7 +165,10 @@ const Contact = () => {
               </select>
             </div>
             <div>
-              <label htmlFor="message" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="message"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Message
               </label>
               <textarea
@@ -155,10 +185,10 @@ const Contact = () => {
               type="submit"
               disabled={isSubmitting}
               className={`w-full bg-emerald-600 text-white py-2 px-4 rounded-md hover:bg-emerald-700 transition-colors ${
-                isSubmitting ? 'opacity-75 cursor-not-allowed' : ''
+                isSubmitting ? "opacity-75 cursor-not-allowed" : ""
               }`}
             >
-              {isSubmitting ? 'Envoi en cours...' : 'Envoyer'}
+              {isSubmitting ? "Envoi en cours..." : "Envoyer"}
             </button>
           </form>
         </div>
@@ -166,7 +196,9 @@ const Contact = () => {
         {/* Contact Information */}
         <div className="space-y-8">
           <div>
-            <h2 className="text-2xl font-semibold mb-4">Informations de contact</h2>
+            <h2 className="text-2xl font-semibold mb-4">
+              Informations de contact
+            </h2>
             <div className="space-y-4">
               <div className="flex items-center text-gray-600">
                 <Phone className="w-5 h-5 mr-2" />
@@ -184,7 +216,9 @@ const Contact = () => {
           </div>
 
           <div>
-            <h2 className="text-2xl font-semibold mb-4">Horaires d'ouverture</h2>
+            <h2 className="text-2xl font-semibold mb-4">
+              Horaires d'ouverture
+            </h2>
             <div className="space-y-2 text-gray-600">
               <p>Lundi - Vendredi: 9h00 - 18h00</p>
               <p>Samedi: Sur rendez-vous</p>
