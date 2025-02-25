@@ -1,17 +1,17 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { supabase } from "../lib/supabase";
+import { supabase } from "../../lib/supabase";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import "../styles/quill.css";
-import { Link } from 'react-router-dom';
+import "../../styles/quill.css";
+import { Link } from "react-router-dom";
 
 const AdminBlogEdit = () => {
   const quillRef = useRef<ReactQuill>(null);
   const AUTHORS = [
-    { id: 'oceane', name: 'Océane' },
-    { id: 'thierry', name: 'Thierry' },
-    { id: 'yoan', name: 'Yoan' }
+    { id: "oceane", name: "Océane" },
+    { id: "thierry", name: "Thierry" },
+    { id: "yoan", name: "Yoan" },
   ] as const;
   const { id } = useParams();
   const navigate = useNavigate();
@@ -20,7 +20,9 @@ const AdminBlogEdit = () => {
   const [content, setContent] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [slug, setSlug] = useState("");
-  const [category, setCategory] = useState<"wedding" | "garden" | "wedding planner" | "baby shower" | "anniversaries">("wedding");
+  const [category, setCategory] = useState<
+    "wedding" | "garden" | "wedding planner" | "baby shower" | "anniversaries"
+  >("wedding");
   const [coverImage, setCoverImage] = useState("");
   const [published, setPublished] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -51,7 +53,7 @@ const AdminBlogEdit = () => {
       setError("Erreur lors du traitement de l'image");
       return null;
     }
-  }, []);  // Empty dependency array since it doesn't use any external values
+  }, []); // Empty dependency array since it doesn't use any external values
   const formats = [
     "header",
     "font",
@@ -91,7 +93,12 @@ const AdminBlogEdit = () => {
       const post = {
         title: title.trim(),
         content: content.trim(),
-        excerpt: excerpt.trim() || content.replace(/<[^>]*>/g, "").substring(0, 150).trim(),
+        excerpt:
+          excerpt.trim() ||
+          content
+            .replace(/<[^>]*>/g, "")
+            .substring(0, 150)
+            .trim(),
         slug: generatedSlug,
         category,
         cover_image: coverImage,
@@ -109,62 +116,69 @@ const AdminBlogEdit = () => {
 
         navigate("/dashboard-vm2024/blog");
       } catch (dbError) {
-        console.error('Database error:', dbError);
-        setError("Erreur de connexion à la base de données. Veuillez réessayer.");
+        console.error("Database error:", dbError);
+        setError(
+          "Erreur de connexion à la base de données. Veuillez réessayer."
+        );
         return;
       }
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Erreur lors de la sauvegarde");
+      setError(
+        error instanceof Error ? error.message : "Erreur lors de la sauvegarde"
+      );
     } finally {
       setLoading(false);
     }
   };
   // Mise à jour de la configuration de l'éditeur
-  const modules = useMemo(() => ({
-    toolbar: {
-      container: [
-        [{ header: [1, 2, 3, false] }],
-        ['bold', 'italic', 'underline', 'strike'],
-        [{ color: [] }, { background: [] }],
-        [{ align: [] }],
-        [{ list: 'ordered' }, { list: 'bullet' }],
-        [{ indent: '-1' }, { indent: '+1' }],
-        ['blockquote'],
-        ['link', 'image'],
-        ['clean']
-      ],
-      handlers: {
-        image: async function() {
-          const input = document.createElement('input');
-          input.setAttribute('type', 'file');
-          input.setAttribute('accept', 'image/*');
-          input.click();
+  const modules = useMemo(
+    () => ({
+      toolbar: {
+        container: [
+          [{ header: [1, 2, 3, false] }],
+          ["bold", "italic", "underline", "strike"],
+          [{ color: [] }, { background: [] }],
+          [{ align: [] }],
+          [{ list: "ordered" }, { list: "bullet" }],
+          [{ indent: "-1" }, { indent: "+1" }],
+          ["blockquote"],
+          ["link", "image"],
+          ["clean"],
+        ],
+        handlers: {
+          image: async function () {
+            const input = document.createElement("input");
+            input.setAttribute("type", "file");
+            input.setAttribute("accept", "image/*");
+            input.click();
 
-          return new Promise((resolve) => {
-            input.onchange = async () => {
-              const file = input.files?.[0];
-              if (file) {
-                const url = await handleImageUpload(file);
-                if (url && quillRef.current) {
-                  resolve(url);
+            return new Promise((resolve) => {
+              input.onchange = async () => {
+                const file = input.files?.[0];
+                if (file) {
+                  const url = await handleImageUpload(file);
+                  if (url && quillRef.current) {
+                    resolve(url);
+                  }
                 }
-              }
-            };
-          });
-        }
-      }
-    },
-    clipboard: {
-      matchVisual: false
-    }
-  }), [handleImageUpload]);
+              };
+            });
+          },
+        },
+      },
+      clipboard: {
+        matchVisual: false,
+      },
+    }),
+    [handleImageUpload]
+  );
   // Separate image handler
   // Move handleQuillImageUpload inside useEffect to avoid dependency issues
   useEffect(() => {
     const handleQuillImageUpload = async () => {
-      const input = document.createElement('input');
-      input.setAttribute('type', 'file');
-      input.setAttribute('accept', 'image/*');
+      const input = document.createElement("input");
+      input.setAttribute("type", "file");
+      input.setAttribute("accept", "image/*");
       input.click();
 
       input.onchange = async () => {
@@ -174,15 +188,15 @@ const AdminBlogEdit = () => {
           if (url && quillRef.current) {
             const quill = quillRef.current.getEditor();
             const range = quill.getSelection(true);
-            quill.insertEmbed(range.index, 'image', url);
+            quill.insertEmbed(range.index, "image", url);
           }
         }
       };
     };
 
     if (quillRef.current) {
-      const toolbar = quillRef.current.getEditor().getModule('toolbar');
-      toolbar.addHandler('image', handleQuillImageUpload);
+      const toolbar = quillRef.current.getEditor().getModule("toolbar");
+      toolbar.addHandler("image", handleQuillImageUpload);
     }
   }, [handleImageUpload]);
   // Modification de la fonction loadPost pour gérer les brouillons
@@ -284,7 +298,14 @@ const AdminBlogEdit = () => {
           <select
             value={category}
             onChange={(e) =>
-              setCategory(e.target.value as "wedding" | "garden" | "wedding planner" | "baby shower" | "anniversaries")
+              setCategory(
+                e.target.value as
+                  | "wedding"
+                  | "garden"
+                  | "wedding planner"
+                  | "baby shower"
+                  | "anniversaries"
+              )
             }
             className="w-full p-2 border rounded"
           >
@@ -363,33 +384,33 @@ const AdminBlogEdit = () => {
           />
         </div>
         {/* ... previous form fields ... */}
-                        <div className="min-h-[400px] relative mb-4">
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Contenu
-                          </label>
-                          <ReactQuill
-                            ref={quillRef}
-                            theme="snow"
-                            value={content}
-                            onChange={setContent}
-                            modules={modules}
-                            formats={formats}
-                            className="h-full"
-                            preserveWhitespace
-                          />
-                        </div>
-                        <div className="mt-4">
-                          <button
-                            onClick={handleSave}
-                            disabled={loading}
-                            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
-                          >
-                            {loading ? "Enregistrement..." : "Enregistrer"}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                };
+        <div className="min-h-[400px] relative mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Contenu
+          </label>
+          <ReactQuill
+            ref={quillRef}
+            theme="snow"
+            value={content}
+            onChange={setContent}
+            modules={modules}
+            formats={formats}
+            className="h-full"
+            preserveWhitespace
+          />
+        </div>
+        <div className="mt-4">
+          <button
+            onClick={handleSave}
+            disabled={loading}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+          >
+            {loading ? "Enregistrement..." : "Enregistrer"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
-                export default AdminBlogEdit;
+export default AdminBlogEdit;

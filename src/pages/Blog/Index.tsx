@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { AlertTriangle, Calendar, ArrowRight } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-import { supabase } from "../lib/supabase";
-import type { Database } from "../types/supabase";
+import { supabase } from "../../lib/supabase";
+import type { Database } from "../../types/supabase";
 
 type Post = Database["public"]["Tables"]["posts"]["Row"];
 
@@ -18,11 +18,13 @@ const Blog = () => {
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
-  
+
     const initializeBlog = async () => {
       try {
         // Check Supabase connection first
-        const { error: connectionError } = await supabase.from("posts").select("count");
+        const { error: connectionError } = await supabase
+          .from("posts")
+          .select("count");
         if (connectionError && isMounted) {
           setIsSupabaseConnected(false);
           throw connectionError;
@@ -30,24 +32,24 @@ const Blog = () => {
         if (isMounted) {
           setIsSupabaseConnected(true);
         }
-  
+
         // If connected, fetch posts immediately
         let query = supabase
           .from("posts")
           .select("*")
           .eq("published", true)
           .order("created_at", { ascending: false });
-  
+
         if (selectedCategory && selectedCategory !== "Tous les articles") {
           query = query.eq("category", selectedCategory);
         }
-  
+
         const { data, error: postsError } = await query;
-  
+
         if (postsError && isMounted) {
           throw postsError;
         }
-  
+
         if (isMounted) {
           setPosts(data || []);
           setError(null);
@@ -68,9 +70,9 @@ const Blog = () => {
         }
       }
     };
-  
+
     initializeBlog();
-  
+
     return () => {
       isMounted = false;
     };
@@ -147,8 +149,10 @@ const Blog = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <h1 className="text-5xl font-bold mb-2 text-gray-900">Blog</h1>
-      <p className="text-xl text-gray-600 mb-12">Découvrez nos derniers articles et actualités</p>
-    
+      <p className="text-xl text-gray-600 mb-12">
+        Découvrez nos derniers articles et actualités
+      </p>
+
       {/* Category Filters */}
       <div className="flex flex-wrap gap-4 mb-12">
         {categories.map((category) => (
@@ -159,16 +163,18 @@ const Blog = () => {
                 category === "Tous les articles" ? null : category
               )
             }
-            className={`px-6 py-3 rounded-full transition-all duration-300 text-sm font-medium ${(category === "Tous les articles" && !selectedCategory) ||
+            className={`px-6 py-3 rounded-full transition-all duration-300 text-sm font-medium ${
+              (category === "Tous les articles" && !selectedCategory) ||
               category === selectedCategory
-              ? "bg-emerald-600 text-white shadow-lg shadow-emerald-100 transform hover:scale-105"
-              : "bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 hover:border-emerald-200"}`}
+                ? "bg-emerald-600 text-white shadow-lg shadow-emerald-100 transform hover:scale-105"
+                : "bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 hover:border-emerald-200"
+            }`}
           >
             {category}
           </button>
         ))}
       </div>
-    
+
       {/* Blog Posts Grid */}
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {posts.map((post) => (
@@ -187,7 +193,7 @@ const Blog = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
             )}
-    
+
             <div className="p-8 flex flex-col flex-grow">
               <div className="flex items-center text-sm text-gray-500 mb-4 space-x-4">
                 <div className="flex items-center">
@@ -204,13 +210,13 @@ const Blog = () => {
                   </span>
                 )}
               </div>
-    
+
               <h2 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-emerald-600 transition-colors">
                 {post.title}
               </h2>
-    
+
               <p className="text-gray-600 mb-6 line-clamp-3">{post.excerpt}</p>
-    
+
               <div className="mt-auto pt-6 border-t border-gray-100">
                 <span className="inline-flex items-center text-emerald-600 font-medium group-hover:text-emerald-700 transition-colors">
                   Lire l'article
@@ -221,7 +227,7 @@ const Blog = () => {
           </Link>
         ))}
       </div>
-    
+
       {posts.length === 0 && (
         <div className="text-center py-16 bg-gray-50 rounded-2xl">
           <p className="text-gray-600 text-lg">

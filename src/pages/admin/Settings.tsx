@@ -1,23 +1,26 @@
-import { useState } from 'react';
-import { supabase } from '../lib/supabase';
-import { Link } from 'react-router-dom';
+import { useState } from "react";
+import { supabase } from "../../lib/supabase";
+import { Link } from "react-router-dom";
 
 const AdminSettings = () => {
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [message, setMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
   const [settings, setSettings] = useState({
-    siteName: 'Océane Event Planner',
-    contactEmail: '',
-    phoneNumber: '',
+    siteName: "Océane Event Planner",
+    contactEmail: "",
+    phoneNumber: "",
     socialMedia: {
-      facebook: '',
-      instagram: '',
-      linkedin: ''
+      facebook: "",
+      instagram: "",
+      linkedin: "",
     },
     seoSettings: {
-      defaultTitle: '',
-      defaultDescription: ''
-    }
+      defaultTitle: "",
+      defaultDescription: "",
+    },
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -26,19 +29,23 @@ const AdminSettings = () => {
     setMessage(null);
 
     try {
-      const { error } = await supabase
-        .from('settings')
-        .upsert({
-          id: 1, // Using a single row for all settings
-          ...settings,
-          updated_at: new Date().toISOString()
-        });
+      const { error } = await supabase.from("settings").upsert({
+        id: 1, // Using a single row for all settings
+        ...settings,
+        updated_at: new Date().toISOString(),
+      });
 
       if (error) throw error;
-      setMessage({ type: 'success', text: 'Paramètres mis à jour avec succès' });
+      setMessage({
+        type: "success",
+        text: "Paramètres mis à jour avec succès",
+      });
     } catch (error) {
-      setMessage({ type: 'error', text: 'Erreur lors de la mise à jour des paramètres' });
-      console.error('Error updating settings:', error);
+      setMessage({
+        type: "error",
+        text: "Erreur lors de la mise à jour des paramètres",
+      });
+      console.error("Error updating settings:", error);
     } finally {
       setLoading(false);
     }
@@ -55,12 +62,13 @@ const AdminSettings = () => {
           ← Retour au tableau de bord
         </Link>
       </div>
-      
 
       {message && (
         <div
           className={`p-4 mb-6 rounded-md ${
-            message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+            message.type === "success"
+              ? "bg-green-100 text-green-700"
+              : "bg-red-100 text-red-700"
           }`}
         >
           {message.text}
@@ -79,7 +87,9 @@ const AdminSettings = () => {
                 <input
                   type="text"
                   value={settings.siteName}
-                  onChange={(e) => setSettings({ ...settings, siteName: e.target.value })}
+                  onChange={(e) =>
+                    setSettings({ ...settings, siteName: e.target.value })
+                  }
                   className="w-full p-2 border rounded-md"
                 />
               </div>
@@ -90,7 +100,9 @@ const AdminSettings = () => {
                 <input
                   type="email"
                   value={settings.contactEmail}
-                  onChange={(e) => setSettings({ ...settings, contactEmail: e.target.value })}
+                  onChange={(e) =>
+                    setSettings({ ...settings, contactEmail: e.target.value })
+                  }
                   className="w-full p-2 border rounded-md"
                 />
               </div>
@@ -101,7 +113,9 @@ const AdminSettings = () => {
                 <input
                   type="tel"
                   value={settings.phoneNumber}
-                  onChange={(e) => setSettings({ ...settings, phoneNumber: e.target.value })}
+                  onChange={(e) =>
+                    setSettings({ ...settings, phoneNumber: e.target.value })
+                  }
                   className="w-full p-2 border rounded-md"
                 />
               </div>
@@ -121,7 +135,10 @@ const AdminSettings = () => {
                   onChange={(e) =>
                     setSettings({
                       ...settings,
-                      socialMedia: { ...settings.socialMedia, facebook: e.target.value }
+                      socialMedia: {
+                        ...settings.socialMedia,
+                        facebook: e.target.value,
+                      },
                     })
                   }
                   className="w-full p-2 border rounded-md"
@@ -138,7 +155,10 @@ const AdminSettings = () => {
                   onChange={(e) =>
                     setSettings({
                       ...settings,
-                      socialMedia: { ...settings.socialMedia, instagram: e.target.value }
+                      socialMedia: {
+                        ...settings.socialMedia,
+                        instagram: e.target.value,
+                      },
                     })
                   }
                   className="w-full p-2 border rounded-md"
@@ -155,7 +175,10 @@ const AdminSettings = () => {
                   onChange={(e) =>
                     setSettings({
                       ...settings,
-                      socialMedia: { ...settings.socialMedia, linkedin: e.target.value }
+                      socialMedia: {
+                        ...settings.socialMedia,
+                        linkedin: e.target.value,
+                      },
                     })
                   }
                   className="w-full p-2 border rounded-md"
@@ -178,7 +201,10 @@ const AdminSettings = () => {
                   onChange={(e) =>
                     setSettings({
                       ...settings,
-                      seoSettings: { ...settings.seoSettings, defaultTitle: e.target.value }
+                      seoSettings: {
+                        ...settings.seoSettings,
+                        defaultTitle: e.target.value,
+                      },
                     })
                   }
                   className="w-full p-2 border rounded-md"
@@ -193,7 +219,10 @@ const AdminSettings = () => {
                   onChange={(e) =>
                     setSettings({
                       ...settings,
-                      seoSettings: { ...settings.seoSettings, defaultDescription: e.target.value }
+                      seoSettings: {
+                        ...settings.seoSettings,
+                        defaultDescription: e.target.value,
+                      },
                     })
                   }
                   className="w-full p-2 border rounded-md"
@@ -210,7 +239,7 @@ const AdminSettings = () => {
             disabled={loading}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
           >
-            {loading ? 'Enregistrement...' : 'Enregistrer les modifications'}
+            {loading ? "Enregistrement..." : "Enregistrer les modifications"}
           </button>
         </div>
       </form>

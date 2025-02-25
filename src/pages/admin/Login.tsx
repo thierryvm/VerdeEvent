@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { useAuth } from "../hooks/useAuth";
-import { supabase } from "../lib/supabase";
+import { useAuth } from "../../hooks/useAuth";
+import { supabase } from "../../lib/supabase";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 
@@ -21,12 +21,14 @@ const AdminLogin = () => {
       if (!mounted) return;
 
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
         if (session && mounted) {
           navigate("/dashboard-vm2024", { replace: true });
         }
       } catch (error) {
-        console.error('Auth check error:', error);
+        console.error("Auth check error:", error);
       }
     };
 
@@ -41,65 +43,75 @@ const AdminLogin = () => {
     };
   }, [isAuthenticated, navigate]);
 
-  const handleSubmit = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (isLoading) return;
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      if (isLoading) return;
 
-    setIsLoading(true);
-    setError("");
+      setIsLoading(true);
+      setError("");
 
-    if (!email || !password) {
-      setError("Veuillez remplir tous les champs");
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      const { data: authData, error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (signInError) {
-        console.error('SignIn error:', signInError);
-        if (signInError.message.includes('Invalid login credentials')) {
-          throw new Error('Email ou mot de passe incorrect');
-        }
-        throw signInError;
+      if (!email || !password) {
+        setError("Veuillez remplir tous les champs");
+        setIsLoading(false);
+        return;
       }
 
-      if (!authData?.session?.access_token) {
-        throw new Error('Session invalide. Veuillez réessayer.');
-      }
-
-      if (authData.session.refresh_token) {
-        try {
-          localStorage.setItem('sb-refresh-token', authData.session.refresh_token);
-          localStorage.setItem('sb-access-token', authData.session.access_token);
-          // Set the session immediately to prevent race conditions
-          await supabase.auth.setSession({
-            access_token: authData.session.access_token,
-            refresh_token: authData.session.refresh_token
+      try {
+        const { data: authData, error: signInError } =
+          await supabase.auth.signInWithPassword({
+            email,
+            password,
           });
-        } catch (storageError) {
-          console.error('Error storing tokens:', storageError);
-          throw new Error('Erreur lors de la sauvegarde de la session');
-        }
-      }
 
-      await login(email, password);
-      navigate('/dashboard-vm2024', { replace: true });
-    } catch (error) {
-      console.error('Login error:', error);
-      setError(
-        error instanceof Error
-          ? error.message
-          : 'Une erreur inattendue est survenue. Veuillez réessayer.'
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  }, [email, password, isLoading, login, navigate]);
+        if (signInError) {
+          console.error("SignIn error:", signInError);
+          if (signInError.message.includes("Invalid login credentials")) {
+            throw new Error("Email ou mot de passe incorrect");
+          }
+          throw signInError;
+        }
+
+        if (!authData?.session?.access_token) {
+          throw new Error("Session invalide. Veuillez réessayer.");
+        }
+
+        if (authData.session.refresh_token) {
+          try {
+            localStorage.setItem(
+              "sb-refresh-token",
+              authData.session.refresh_token
+            );
+            localStorage.setItem(
+              "sb-access-token",
+              authData.session.access_token
+            );
+            // Set the session immediately to prevent race conditions
+            await supabase.auth.setSession({
+              access_token: authData.session.access_token,
+              refresh_token: authData.session.refresh_token,
+            });
+          } catch (storageError) {
+            console.error("Error storing tokens:", storageError);
+            throw new Error("Erreur lors de la sauvegarde de la session");
+          }
+        }
+
+        await login(email, password);
+        navigate("/dashboard-vm2024", { replace: true });
+      } catch (error) {
+        console.error("Login error:", error);
+        setError(
+          error instanceof Error
+            ? error.message
+            : "Une erreur inattendue est survenue. Veuillez réessayer."
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [email, password, isLoading, login, navigate]
+  );
 
   const handleCreateAccount = useCallback(async () => {
     if (isLoading) return;

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { supabase } from "../lib/supabase";
+import { supabase } from "../../lib/supabase";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { Calendar, Tag, ArrowLeft } from "lucide-react";
-import type { Database } from "../types/supabase";
+import type { Database } from "../../types/supabase";
 import DOMPurify from "dompurify";
 
 type Post = Database["public"]["Tables"]["posts"]["Row"];

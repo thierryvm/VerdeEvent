@@ -2,19 +2,19 @@ import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
-import Blog from "./pages/Blog";
-import BlogPost from "./pages/BlogPost";
+import Blog from "./pages/Blog/Index";
+import BlogPost from "./pages/Blog/Post";
 import Contact from "./pages/Contact";
 import OceaneEventPlanner from "./pages/OceaneEventPlanner";
 import Vertiyo from "./pages/Vertiyo";
-import AdminBlog from "./pages/AdminBlog";
-import AdminLogin from "./pages/AdminLogin";
+import AdminBlog from "./pages/admin/Blog";
+import AdminLogin from "./pages/admin/Login";
 import PrivateRoute from "./components/ProtectedRoute";
-import AdminBlogEdit from "./pages/AdminBlogEdit";
-import AdminDashboard from "./pages/AdminDashboard";
-import AdminPages from "./pages/AdminPages";
-import AdminMedia from "./pages/AdminMedia";
-import AdminSettings from "./pages/AdminSettings";
+import AdminBlogEdit from "./pages/admin/BlogEdit";
+import AdminDashboard from "./pages/admin/Dashboard";
+import AdminPages from "./pages/admin/Pages";
+import AdminMedia from "./pages/admin/Media";
+import AdminSettings from "./pages/admin/Settings";
 import { AuthProvider } from "./auth";
 import ScrollToTop from "./components/ScrollToTop";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -45,7 +45,10 @@ function App() {
             <Route path="blog" element={<Blog />} />
             <Route path="blog/:slug" element={<BlogPost />} />
             <Route path="contact" element={<Contact />} />
-            <Route path="oceane-event-planner" element={<OceaneEventPlanner />} />
+            <Route
+              path="oceane-event-planner"
+              element={<OceaneEventPlanner />}
+            />
             <Route path="vertiyo" element={<Vertiyo />} />
             <Route path="terms" element={<TermsAndConditions />} />
             <Route path="privacy" element={<PrivacyPolicy />} />

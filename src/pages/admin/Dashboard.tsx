@@ -1,5 +1,5 @@
 import { Link, useNavigate, Navigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 import { BarChart2, Users, FileText, Settings, LogOut } from "lucide-react";
 import { useEffect, useState, useMemo, useRef } from "react";
 import {
@@ -11,7 +11,7 @@ import {
 } from "chart.js";
 
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
-import { supabase } from "../lib/supabase";
+import { supabase } from "../../lib/supabase";
 const AdminDashboard = () => {
   const { isAuthenticated, logout, user, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();

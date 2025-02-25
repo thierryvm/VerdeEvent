@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { supabase } from "../lib/supabase";
+import { supabase } from "../../lib/supabase";
 
 interface Post {
   id: string;
@@ -48,10 +48,7 @@ const BlogPreview = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="mb-4">
-        <Link
-          to="/admin/blog"
-          className="text-blue-600 hover:text-blue-800"
-        >
+        <Link to="/admin/blog" className="text-blue-600 hover:text-blue-800">
           ← Retour à la gestion
         </Link>
       </div>

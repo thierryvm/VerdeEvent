@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Plus, Edit2, Trash2, Eye } from 'lucide-react';
-import { supabase } from '../lib/supabase';
-import type { Database } from '../types/supabase';
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { Plus, Edit2, Trash2, Eye } from "lucide-react";
+import { supabase } from "../../lib/supabase";
+import type { Database } from "../../types/supabase";
 
-type Post = Database['public']['Tables']['posts']['Row'];
+type Post = Database["public"]["Tables"]["posts"]["Row"];
 
 const AdminBlog = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -16,12 +16,12 @@ const AdminBlog = () => {
 
   const fetchPosts = async () => {
     const { data, error } = await supabase
-      .from('posts')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .from("posts")
+      .select("*")
+      .order("created_at", { ascending: false });
 
     if (error) {
-      console.error('Error fetching posts:', error);
+      console.error("Error fetching posts:", error);
     } else {
       setPosts(data || []);
     }
@@ -29,15 +29,13 @@ const AdminBlog = () => {
   };
 
   const deletePost = async (id: string) => {
-    if (!window.confirm('Êtes-vous sûr de vouloir supprimer cet article ?')) return;
+    if (!window.confirm("Êtes-vous sûr de vouloir supprimer cet article ?"))
+      return;
 
-    const { error } = await supabase
-      .from('posts')
-      .delete()
-      .eq('id', id);
+    const { error } = await supabase.from("posts").delete().eq("id", id);
 
     if (error) {
-      console.error('Error deleting post:', error);
+      console.error("Error deleting post:", error);
     } else {
       fetchPosts();
     }
@@ -45,12 +43,12 @@ const AdminBlog = () => {
 
   const togglePublished = async (id: string, currentStatus: boolean) => {
     const { error } = await supabase
-      .from('posts')
+      .from("posts")
       .update({ published: !currentStatus })
-      .eq('id', id);
+      .eq("id", id);
 
     if (error) {
-      console.error('Error updating post:', error);
+      console.error("Error updating post:", error);
     } else {
       fetchPosts();
     }
@@ -103,22 +101,26 @@ const AdminBlog = () => {
             {posts.map((post) => (
               <tr key={post.id}>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">{post.title}</div>
+                  <div className="text-sm font-medium text-gray-900">
+                    {post.title}
+                  </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <button
                     onClick={() => togglePublished(post.id, post.published)}
                     className={`px-2 py-1 text-xs rounded-full ${
                       post.published
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-gray-100 text-gray-800'
+                        ? "bg-green-100 text-green-800"
+                        : "bg-gray-100 text-gray-800"
                     }`}
                   >
-                    {post.published ? 'Publié' : 'Brouillon'}
+                    {post.published ? "Publié" : "Brouillon"}
                   </button>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {post.category === 'wedding' ? 'Wedding Planning' : 'Aménagement Paysager'}
+                  {post.category === "wedding"
+                    ? "Wedding Planning"
+                    : "Aménagement Paysager"}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <div className="flex justify-end space-x-2">
