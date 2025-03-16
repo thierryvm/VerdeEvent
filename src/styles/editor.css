@@ -1,0 +1,88 @@
+/* Créez ce fichier et importez-le dans votre composant */
+.ql-editor img {
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+  display: block;
+}
+
+.ql-snow .ql-editor {
+  min-height: 200px;
+  padding: 1rem;
+}
+
+/* Style pour l'affichage du contenu dans l'article */
+.blog-content img {
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+  display: block;
+}
+
+.blog-content {
+  font-family: inherit;
+}
+
+.blog-content p {
+  margin-bottom: 1rem;
+}
+.ql-editor {
+  min-height: 300px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.ql-container {
+  height: calc(100% - 42px);
+  overflow-y: auto;
+}
+
+.ql-editor {
+  min-height: 300px;
+  padding: 1rem;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.ql-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: white;
+  border-bottom: 1px solid #ccc;
+}
+.ql-editor img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1em auto;
+}
+
+.ql-editor p {
+  margin-bottom: 1em;
+}
+
+.ql-snow .ql-toolbar button {
+  padding: 6px 8px;
+}
+
+.ql-snow .ql-picker {
+  font-size: 14px;
+}
+
+/* Styles pour les différents éléments de contenu */
+.ql-editor h1 { font-size: 2em; margin: 1em 0; }
+.ql-editor h2 { font-size: 1.5em; margin: 0.83em 0; }
+.ql-editor h3 { font-size: 1.17em; margin: 0.67em 0; }
+
+.ql-editor blockquote {
+  border-left: 4px solid #ccc;
+  margin: 1.5em 0;
+  padding-left: 1em;
+}
+
+.ql-editor pre.ql-syntax {
+  background-color: #f4f4f4;
+  border-radius: 3px;
+  padding: 1em;
+  margin: 1em 0;
+}
