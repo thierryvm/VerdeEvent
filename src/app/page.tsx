@@ -238,18 +238,18 @@ export default function HomePage() {
       <Section className="bg-primary/5">
         <div className="text-center max-w-3xl mx-auto">
           <h2 className="text-3xl font-playfair font-bold mb-4">
-            Prêt à concrétiser votre projet ?
+            Prêt à créer un événement inoubliable ?
           </h2>
           <p className="mb-8 text-text-primary">
             Contactez-nous dès aujourd'hui pour discuter de votre projet et découvrir comment nous
-            pouvons vous aider à le réaliser.
+            pouvons vous aider à réaliser l'événement de vos rêves.
           </p>
           <Button
             asChild
             size="lg"
             className="bg-primary hover:bg-primary-dark text-white font-medium"
           >
-            <Link href="/contact">Nous contacter</Link>
+            <Link href="/contact">Demander un devis gratuit</Link>
           </Button>
         </div>
       </Section>

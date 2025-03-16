@@ -1,6 +1,108 @@
-# VerdeEvent - Site Web
+# VerdeEvent - Site Web d'Organisation d'Événements Écologiques
 
-Site web pour VerdeEvent, combinant les services d'Oceane Event Planner (organisation d'événements) et Vertiyo (aménagement de parcs et jardins).
+VerdeEvent est une entreprise spécialisée dans l'organisation d'événements écologiques et durables. Ce dépôt contient le code source du site web de VerdeEvent, développé avec Next.js, Tailwind CSS et Supabase.
+
+## Fonctionnalités
+
+- Présentation des services d'organisation d'événements écologiques
+- Galerie de photos d'événements passés
+- Témoignages clients
+- Formulaire de contact
+- Panneau d'administration pour gérer le contenu du site
+- Authentification pour les administrateurs
+- Base de données Supabase pour stocker les données
+
+## Prérequis
+
+- Node.js 18.x ou supérieur
+- npm ou yarn
+- Compte Supabase (gratuit pour commencer)
+
+## Installation
+
+1. Clonez ce dépôt :
+
+```bash
+git clone https://github.com/votre-utilisateur/verdeevent.git
+cd verdeevent
+```
+
+2. Installez les dépendances :
+
+```bash
+npm install
+# ou
+yarn install
+```
+
+3. Copiez le fichier `.env.example` en `.env.local` et configurez les variables d'environnement :
+
+```bash
+cp .env.example .env.local
+```
+
+4. Modifiez le fichier `.env.local` avec vos propres valeurs :
+
+```
+NEXT_PUBLIC_SUPABASE_URL=https://votre-projet.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=votre-clé-anon-supabase
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
+
+## Configuration de Supabase
+
+Consultez le fichier [supabase/README.md](supabase/README.md) pour des instructions détaillées sur la configuration de Supabase pour ce projet.
+
+## Développement
+
+Pour lancer le serveur de développement :
+
+```bash
+npm run dev
+# ou
+yarn dev
+```
+
+Ouvrez [http://localhost:3000](http://localhost:3000) dans votre navigateur pour voir le résultat.
+
+## Structure du projet
+
+```
+/
+├── public/            # Fichiers statiques (images, etc.)
+├── src/
+│   ├── app/           # Routes de l'application Next.js
+│   │   ├── admin/     # Interface d'administration
+│   │   ├── api/       # Routes API
+│   │   └── ...        # Autres pages du site
+│   ├── components/    # Composants React réutilisables
+│   ├── contexts/      # Contextes React (AuthContext, etc.)
+│   ├── lib/           # Bibliothèques et utilitaires
+│   └── styles/        # Styles globaux
+├── supabase/
+│   ├── migrations/    # Migrations SQL pour Supabase
+│   └── README.md      # Instructions pour configurer Supabase
+└── ...
+```
+
+## Déploiement
+
+Ce site peut être déployé sur Vercel, Netlify ou tout autre service compatible avec Next.js.
+
+### Déploiement sur Vercel
+
+1. Créez un compte sur [Vercel](https://vercel.com)
+2. Connectez votre dépôt GitHub
+3. Configurez les variables d'environnement dans les paramètres du projet
+4. Déployez !
+
+## Contribution
+
+Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou une pull request.
+
+## Licence
+
+Ce projet est sous licence [MIT](LICENSE).
 
 ## Technologies utilisées
 

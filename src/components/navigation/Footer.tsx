@@ -11,25 +11,6 @@ export function Footer() {
 
   return (
     <footer className="bg-white border-t border-border">
-      {/* CTA Section */}
-      <div className="container mx-auto py-16 px-4">
-        <div className="bg-primary/5 rounded-xl p-8 md:p-12 text-center max-w-4xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-playfair font-bold mb-4 text-primary">
-            Prêt à concrétiser votre projet ?
-          </h2>
-          <p className="text-foreground mb-8 max-w-2xl mx-auto">
-            Contactez-nous dès aujourd'hui pour discuter de votre événement ou de votre projet
-            d'aménagement paysager.
-          </p>
-          <Link
-            href="/contact"
-            className="inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-medium bg-primary text-white hover:bg-primary-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
-          >
-            Nous contacter
-          </Link>
-        </div>
-      </div>
-
       <div className="container mx-auto py-12 px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}

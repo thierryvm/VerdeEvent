@@ -22,10 +22,11 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { supabase } from '@/lib/supabase';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Mail, MapPin, Phone, Send } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -50,7 +51,18 @@ const formSchema = z.object({
 });
 
 export default function ContactPage() {
+  const formId = useId();
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    subject: '',
+    message: '',
+  });
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -65,18 +77,47 @@ export default function ContactPage() {
     },
   });
 
-  const isSubmitting = form.formState.isSubmitting;
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setFormError(null);
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Simuler l'envoi du formulaire
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    console.log(values);
-    setSubmitSuccess(true);
-    form.reset();
-  }
+    try {
+      // Envoyer les données à Supabase
+      const { error } = await supabase.from('contacts').insert([
+        {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          subject: formData.subject,
+          message: formData.message,
+          is_read: false,
+        },
+      ]);
+
+      if (error) throw error;
+
+      // Réinitialiser le formulaire
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: '',
+      });
+      setIsSubmitted(true);
+    } catch (error: any) {
+      console.error("Erreur lors de l'envoi du formulaire:", error);
+      setFormError(
+        "Une erreur est survenue lors de l'envoi de votre message. Veuillez réessayer plus tard."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
-    <main>
+    <main suppressHydrationWarning>
       {/* Hero Section */}
       <div className="relative h-[50vh] min-h-[400px] w-full">
         <div className="absolute inset-0">
@@ -109,7 +150,7 @@ export default function ContactPage() {
             <Card>
               <CardContent className="p-6">
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  <form onSubmit={handleSubmit} className="space-y-6" suppressHydrationWarning>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <FormField
                         control={form.control}
@@ -272,10 +313,16 @@ export default function ContactPage() {
                       )}
                     </Button>
 
-                    {submitSuccess && (
+                    {isSubmitted && (
                       <div className="bg-green-50 border border-green-200 text-green-800 rounded-md p-4 mt-4">
                         <p className="font-medium">Message envoyé avec succès!</p>
                         <p className="text-sm">Nous vous répondrons dans les plus brefs délais.</p>
+                      </div>
+                    )}
+
+                    {formError && (
+                      <div className="bg-red-50 border border-red-200 text-red-800 rounded-md p-4 mt-4">
+                        <p className="font-medium">{formError}</p>
                       </div>
                     )}
                   </form>
@@ -341,14 +388,17 @@ export default function ContactPage() {
               </div>
 
               <div className="relative h-[300px] rounded-lg overflow-hidden">
-                <Image
-                  src="/images/contact-bg.jpg"
-                  alt="Nos bureaux"
-                  fill
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2519.700327595181!2d4.351697615741934!3d50.85045397953058!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNTDCsDUxJzAxLjYiTiA0wrAyMScwNi4xIkU!5e0!3m2!1sfr!2sbe!4v1623245214076!5m2!1sfr!2sbe"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen={false}
                   loading="lazy"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover"
-                />
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Carte VerdeEvent"
+                  className="absolute inset-0"
+                ></iframe>
               </div>
             </div>
           </div>

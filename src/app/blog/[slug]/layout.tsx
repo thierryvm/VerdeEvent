@@ -16,6 +16,12 @@ export async function generateMetadata(
   };
 }
 
-export default function BlogPostLayout({ children }: { children: React.ReactNode }) {
+export default function BlogPostLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: { slug: string };
+}) {
   return <>{children}</>;
 }
